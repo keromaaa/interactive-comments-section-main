@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-const Upvotes = () => {
-  const [upvotes, setUpvotes] = useState(15)
+const Upvotes = ({ upvotes }) => {
 
   return (
     <div className='bg-very-light-gray rounded-[10px] h-fit w-fit p-2 py-1.5 flex lg:px-3 lg:flex-col justify-center items-center gap-4 lg:gap-1 lg:order-first'>

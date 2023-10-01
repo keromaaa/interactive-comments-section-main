@@ -36,9 +36,10 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
       </div >
       <div className='border-l border-light-gray'>
         {
-          replies && replies.map((el) => {
-            <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
-          })
+
+          // replies && replies.map((el) => {
+          //   <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
+          // })
         }
       </div>
     </div>

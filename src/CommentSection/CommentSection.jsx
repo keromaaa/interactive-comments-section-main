@@ -7,11 +7,13 @@ import useComments from '../../hooks/useComments'
 const CommentSection = () => {
   const { comments } = useComments()
 
+  console.log(comments)
   return (
     <div className='w-full max-w-[600px] px-[15px] py-6 lg:max-w-[750px] h-screen flex flex-col gap-4'>
-      {comments && comments.map((el) => {
-        <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
-      })}
+      {
+        comments && comments.map((el) => {
+          return <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
+        })}
       <AddComment />
     </div>
   )

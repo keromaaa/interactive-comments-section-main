@@ -7,7 +7,7 @@ import useComments from '../../hooks/useComments'
 const CommentSection = () => {
   const { comments } = useComments()
 
-  console.log(comments)
+
   return (
     <div className='w-full max-w-[600px] px-[15px] py-6 lg:max-w-[750px] h-screen flex flex-col gap-4'>
       {

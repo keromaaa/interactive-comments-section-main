@@ -11,21 +11,29 @@ const CommentProvider = ({ children }) => {
 
   const getComments = () => {
     axios
-      .get('https://localhost:7218/GetAll')
+      .get('https://localhost:7218/GetAll/', { headers: { "Content-Type": "application/json", "Accept": "application/json", "Access-Control-Allow-Origin": "*" } })
       .then(response => response.data)
       .then(data => setComments(data.data))
+      .catch(err => console.log(err.message))
+  }
+
+  const getComment = (id) => {
+    axios
+      .get(`https://localhost:7218/api/Comments/Get?id=${id}`)
+      .then(response => response.data)
+      .then(data => setComment(data.data))
       .catch(err => console.log(err))
   }
 
   useEffect(() => {
-    if (comments.length === 0)
-      getComments()
+    getComments()
   }, [comments])
 
   return (
     <CommentContext.Provider value={{
       comment,
       comments,
+      getComment,
       setComment,
       getComments
     }}>

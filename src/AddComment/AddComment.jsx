@@ -53,10 +53,10 @@ const AddComment = () => {
   return (
     <div className='bg-white w-full h-fit rounded-lg p-4 shadow-sm flex flex-col lg:flex-row items-end lg:items-start gap-4 relative' >
       <img className='h-10 absolute left-6 bottom-6 lg:top-6 lg:bottom-auto' src="../images/avatars/image-amyrobson.png" alt="" />
-      <form className='flex w-full gap-4' onSubmit={(e) => handleSubmit(e)}>
+      <form className='flex flex-col lg:flex-row items-end lg:items-start w-full lg:ml-16 gap-4' onSubmit={(e) => handleSubmit(e)}>
         <textarea
           ref={inputRef}
-          className='rounded-md border-[1px] outline-none resize-none border-light-gray focus:border-moderate-blue w-full px-4 py-2 lg:ml-16 text-dark-blue'
+          className='rounded-md border-[1px] outline-none resize-none border-light-gray focus:border-moderate-blue w-full px-4 py-2  text-dark-blue'
           name=""
           id=""
           cols='1'

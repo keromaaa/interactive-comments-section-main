@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Upvotes from '../Upvotes/Upvotes'
+import Modal from '../Modal/Modal'
 import useComments from '../../hooks/useComments'
 import axios from 'axios'
 
@@ -8,6 +9,7 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
   const inputRef = useRef(null)
   const [editing, setEditing] = useState(false)
   const [editContent, setEditContent] = useState(content)
+  const [isOpen, setIsOpen] = useState(false)
 
   const editComment = (e) => {
     e.preventDefault()
@@ -66,6 +68,23 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
 
   return (
     <div className='flex flex-col gap-4'>
+      <Modal open={isOpen}>
+        <div className='flex flex-col gap-4 w-[400px]'>
+          <h2 className='font-bold text-2xl text-dark-blue'>Delete comment</h2>
+          <p className='text-grayish-blue'>Are you sure you want to delete this comment? This will remove the comment and can't be undone.</p>
+          <div className="flex justify-between mt-2">
+            <button className='bg-grayish-blue hover:bg-opacity-50 text-white font-bold p-4 rounded-lg'
+              type="button"
+              onClick={() => setIsOpen(false)}>NO, CANCEL</button>
+            <button className='bg-soft-red hover:bg-pale-red text-white font-bold p-4 rounded-lg'
+              type="button"
+              onClick={() => {
+                deleteComment();
+                setIsOpen(false)
+              }}>YES, DELETE</button>
+          </div>
+        </div>
+      </Modal>
       <div className='bg-white w-full h-fit rounded-lg p-4 shadow-sm flex flex-col lg:flex-row items-start gap-4 relative'>
         <div className='flex flex-1 flex-col w-full text-base gap-4'>
           <div className='flex gap-4 items-center h-fit flex-wrap'>
@@ -97,7 +116,7 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
         </div>
         <Upvotes upvotes={score} />
         <div className='absolute bottom-6 right-6 lg:top-6 lg:bottom-auto flex gap-4'>
-          <div className="flex items-center gap-1 group cursor-pointer" onClick={deleteComment}>
+          <div className="flex items-center gap-1 group cursor-pointer" onClick={() => setIsOpen(true)}>
             <svg className='fill-soft-red group-hover:fill-pale-red' width="12" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.167 12.448c0 .854.7 1.552 1.555 1.552h6.222c.856 0 1.556-.698 1.556-1.552V3.5H1.167v8.948Zm10.5-11.281H8.75L7.773 0h-3.88l-.976 1.167H0v1.166h11.667V1.167Z" fill="inherit" /></svg>
             <div className='text-soft-red font-medium group-hover:text-pale-red max-[300px]:hidden select-none'>Delete</div>
           </div>

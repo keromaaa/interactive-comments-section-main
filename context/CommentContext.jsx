@@ -11,7 +11,13 @@ const CommentProvider = ({ children }) => {
 
   const getComments = () => {
     axios
-      .get('https://localhost:7218/GetAll/', { headers: { "Content-Type": "application/json", "Accept": "application/json", "Access-Control-Allow-Origin": "*" } })
+      .get('https://localhost:7218/GetAll/', {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
+      })
       .then(response => response.data)
       .then(data => setComments(data.data))
       .catch(err => console.log(err.message))
@@ -22,7 +28,7 @@ const CommentProvider = ({ children }) => {
       .get(`https://localhost:7218/api/Comments/Get?id=${id}`)
       .then(response => response.data)
       .then(data => setComment(data.value))
-      .catch(err => console.log(err))
+      .catch(err => console.log(err.message))
 
     return comment
   }

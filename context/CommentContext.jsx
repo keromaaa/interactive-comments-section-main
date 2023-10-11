@@ -21,8 +21,10 @@ const CommentProvider = ({ children }) => {
     axios
       .get(`https://localhost:7218/api/Comments/Get?id=${id}`)
       .then(response => response.data)
-      .then(data => setComment(data.data))
+      .then(data => setComment(data.value))
       .catch(err => console.log(err))
+
+    return comment
   }
 
   useEffect(() => {

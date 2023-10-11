@@ -3,53 +3,15 @@ import Upvotes from '../Upvotes/Upvotes'
 import Modal from '../Modal/Modal'
 import useComments from '../../hooks/useComments'
 import axios from 'axios'
+import EditComment from '../EditComment/EditComment'
 
 const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => {
-  const { getComments } = useComments()
-  const inputRef = useRef(null)
+  const { comment, getComments, getComment } = useComments()
   const [editing, setEditing] = useState(false)
-  const [editContent, setEditContent] = useState(content)
   const [isOpen, setIsOpen] = useState(false)
-
-  const editComment = (e) => {
-    e.preventDefault()
-
-    const comment = {
-      id: id,
-      content: editContent,
-      createdAt: "2023-10-02T21:29:30.507Z",
-      score: score,
-      replies: replies,
-      parentId: parentId
-    }
-
-    if (comment.content === '') {
-      inputRef.current.classList.add('border-soft-red')
-      inputRef.current.classList.add('focus:border-soft-red')
-      inputRef.current.placeholder = "Comment can't be blank"
-    }
-    else {
-      inputRef.current.classList.remove('border-soft-red')
-      inputRef.current.classList.remove('focus:border-soft-red')
-      inputRef.current.placeholder = "Edit your comment..."
-
-      axios.post("https://localhost:7218/api/Comments/Edit/", comment, {
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
-      }).then((response) => response.data)
-        .then(data => console.log(data))
-        .catch(err => console.log(err.message))
-
-      setEditing(!editing)
-    }
-  }
 
   const handleEditClick = () => {
     setEditing(!editing)
-    inputRef.current.value = content
   }
 
   const handleSubmit = (e) => {
@@ -97,20 +59,11 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
           </div>
           {
             editing ?
-              <form className='flex flex-col w-full items-end gap-4' onSubmit={(e) => handleSubmit(e)}>
-                <textarea
-                  ref={inputRef}
-                  className='rounded-md border-[1px] outline-none resize-none border-light-gray focus:border-moderate-blue w-full px-4 py-2 text-dark-blue'
-                  name=""
-                  id=""
-                  cols='1'
-                  rows='5'
-                  placeholder='Edit your comment...'
-                  value={editContent}
-                  onChange={(e) => setEditContent(e.target.value)}>
-                </textarea>
-                <input onClick={(e) => editComment(e)} className='rounded-md bg-moderate-blue hover:bg-light-grayish-blue text-white px-6 py-3 w-fit h-fit font-medium cursor-pointer select-none' type="submit" value="UPDATE" />
-              </form> :
+              <EditComment
+                id={id}
+                content={content}
+                onEdit={() => setEditing(!editing)}
+              /> :
               <p className='font-normal text-grayish-blue'>{content}</p>
           }
         </div>

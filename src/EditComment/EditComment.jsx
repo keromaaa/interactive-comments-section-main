@@ -1,35 +1,52 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
+import axios from 'axios'
+import useComments from '../../hooks/useComments'
 
-const EditComment = ({ onSubmit, content, setContent, onClick }) => {
-  const inputRef = useRef()
+const EditComment = ({ id, content, onEdit }) => {
+  const inputRef = useRef(null)
+  const [editContent, setEditContent] = useState(content)
+  const { comment, getComment, getComments } = useComments()
 
-  const setError = () => {
-    if (content === '') {
-      inputRef.current.classList.add('border-soft-red')
-      inputRef.current.classList.add('focus:border-soft-red')
-      inputRef.current.placeholder = "Comment can't be blank"
-    }
-    else {
-      inputRef.current.classList.remove('border-soft-red')
-      inputRef.current.classList.remove('focus:border-soft-red')
-      inputRef.current.placeholder = "Edit your comment..."
-    }
+  const editComment = (e) => {
+    e.preventDefault()
+    console.log(comment)
+
+    axios
+      .post('https://localhost:7218/api/Comments/Edit', { ...comment, content: editContent }, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
+      })
+      .then(response => response.data)
+      .then(data => console.log(data.data))
+      .catch(err => console.log(err))
+      .finally(getComments())
+
+    // Call the onEdit callback to inform the parent component about the edit
+    onEdit()
   }
 
   return (
-    <form className='flex flex-col w-full items-end gap-4' onSubmit={onSubmit}>
+    <form className='flex flex-col w-full items-end gap-4' onSubmit={(e) => editComment(e)}>
       <textarea
         ref={inputRef}
         className='rounded-md border-[1px] outline-none resize-none border-light-gray focus:border-moderate-blue w-full px-4 py-2 text-dark-blue'
-        name=""
-        id=""
+        name=''
+        id=''
         cols='1'
         rows='5'
         placeholder='Edit your comment...'
-        value={content}
-        onChange={setContent}>
+        value={editContent}
+        onChange={(e) => setEditContent(e.target.value)}>
       </textarea>
-      <input onClick={() => { onClick(); setError() }} className='rounded-md bg-moderate-blue hover:bg-light-grayish-blue text-white px-6 py-3 w-fit h-fit font-medium cursor-pointer select-none' type="submit" value="UPDATE" />
+      <input
+        onClick={(e) => editComment(e)}
+        className='rounded-md bg-moderate-blue hover:bg-light-grayish-blue text-white px-6 py-3 w-fit h-fit font-medium cursor-pointer select-none'
+        type="submit"
+        value="UPDATE"
+      />
     </form>
   )
 }

@@ -23,9 +23,11 @@ const EditComment = ({ id, content, onEdit }) => {
         }
       })
       .then(response => response.data)
-      .then(data => console.log(data.value))
+      .then(data => console.log(data.data))
       .catch(err => console.log(err))
       .finally(getComments())
+
+    getComment(id)
 
     // Call the onEdit callback to inform the parent component about the edit
     onEdit()

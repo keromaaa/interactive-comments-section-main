@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Upvotes from '../Upvotes/Upvotes'
-import EditComment from '../EditComment/EditComment'
 import Modal from '../Modal/Modal'
 import useComments from '../../hooks/useComments'
 import axios from 'axios'
 
 const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => {
   const { getComments } = useComments()
+  const inputRef = useRef(null)
   const [editing, setEditing] = useState(false)
   const [editContent, setEditContent] = useState(content)
   const [isOpen, setIsOpen] = useState(false)
@@ -23,7 +23,16 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
       parentId: parentId
     }
 
-    if (comment.content !== '') {
+    if (comment.content === '') {
+      inputRef.current.classList.add('border-soft-red')
+      inputRef.current.classList.add('focus:border-soft-red')
+      inputRef.current.placeholder = "Comment can't be blank"
+    }
+    else {
+      inputRef.current.classList.remove('border-soft-red')
+      inputRef.current.classList.remove('focus:border-soft-red')
+      inputRef.current.placeholder = "Edit your comment..."
+
       axios.post("https://localhost:7218/api/Comments/Edit/", comment, {
         headers: {
           "Content-Type": "application/json",
@@ -60,16 +69,14 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
   return (
     <div className='flex flex-col gap-4'>
       <Modal open={isOpen}>
-        <div className='flex flex-col gap-4 max-w-[400px]'>
+        <div className='flex flex-col gap-4 w-[400px]'>
           <h2 className='font-bold text-2xl text-dark-blue'>Delete comment</h2>
           <p className='text-grayish-blue'>Are you sure you want to delete this comment? This will remove the comment and can't be undone.</p>
           <div className="flex justify-between mt-2">
-            <button
-              className='bg-grayish-blue hover:bg-opacity-50 text-white font-bold p-4 rounded-lg'
+            <button className='bg-grayish-blue hover:bg-opacity-50 text-white font-bold p-4 rounded-lg'
               type="button"
               onClick={() => setIsOpen(false)}>NO, CANCEL</button>
-            <button
-              className='bg-soft-red hover:bg-pale-red text-white font-bold p-4 rounded-lg'
+            <button className='bg-soft-red hover:bg-pale-red text-white font-bold p-4 rounded-lg'
               type="button"
               onClick={() => {
                 deleteComment();
@@ -90,12 +97,20 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
           </div>
           {
             editing ?
-              <EditComment
-                onSubmit={(e) => handleSubmit(e)}
-                content={editContent}
-                setContent={(e) => setEditContent(e.target.value)}
-                onClick={(e) => editComment(e)}
-              /> :
+              <form className='flex flex-col w-full items-end gap-4' onSubmit={(e) => handleSubmit(e)}>
+                <textarea
+                  ref={inputRef}
+                  className='rounded-md border-[1px] outline-none resize-none border-light-gray focus:border-moderate-blue w-full px-4 py-2 text-dark-blue'
+                  name=""
+                  id=""
+                  cols='1'
+                  rows='5'
+                  placeholder='Edit your comment...'
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}>
+                </textarea>
+                <input onClick={(e) => editComment(e)} className='rounded-md bg-moderate-blue hover:bg-light-grayish-blue text-white px-6 py-3 w-fit h-fit font-medium cursor-pointer select-none' type="submit" value="UPDATE" />
+              </form> :
               <p className='font-normal text-grayish-blue'>{content}</p>
           }
         </div>
@@ -111,20 +126,17 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
           </div>
         </div>
       </div >
-      {
-        replies.count > 0 && <div className='flex'>
-          {parentId === null && <div className='border-l-4 border-light-gray pl-8 ml-8 flex flex-col'></div>}
-          {replies &&
-            <div className='w-full'>
-              {
-                replies.map((el) => {
-                  return <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
-                })
-              }
-            </div>
-          }
-        </div>
-      }
+      {replies.count > 0 && <div className='flex'>
+        {parentId == null && <div className='border-l-4 border-light-gray pl-8 ml-8 flex flex-col'></div>}
+        {replies &&
+          <div className='w-full'>
+            {
+              replies.map((el) => {
+                return <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
+              })
+            }
+          </div>}
+      </div>}
     </div>
   )
 }

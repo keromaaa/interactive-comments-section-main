@@ -15,7 +15,7 @@ const CommentSection = () => {
     <div className='w-full max-w-[600px] px-[15px] py-6 lg:max-w-[750px] h-screen flex flex-col gap-4'>
       {
         comments && comments.map((el) => {
-          return <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
+          return <Comment comment={el} key={el.id} />
         })}
       <AddComment />
     </div>

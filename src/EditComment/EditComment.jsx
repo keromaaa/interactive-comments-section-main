@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react'
 import axios from 'axios'
 import useComments from '../../hooks/useComments'
 
-const EditComment = ({ id, content, createdAt, score, replies, onEdit }) => {
+const EditComment = ({ comment, onEdit }) => {
   const inputRef = useRef(null)
-  const [editContent, setEditContent] = useState(content)
+  const [editContent, setEditContent] = useState(comment.content)
   const { getComments } = useComments()
 
   const editComment = (e) => {
@@ -12,11 +12,8 @@ const EditComment = ({ id, content, createdAt, score, replies, onEdit }) => {
 
     axios
       .post('https://localhost:7218/api/Comments/Edit', {
-        id: id,
-        content: editContent,
-        createdAt: createdAt,
-        score: score,
-        replies: replies
+        ...comment,
+        content: editContent
       }, {
         headers: {
           "Content-Type": "application/json",

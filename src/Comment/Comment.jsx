@@ -5,13 +5,13 @@ import useComments from '../../hooks/useComments'
 import axios from 'axios'
 import EditComment from '../EditComment/EditComment'
 
-const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => {
-  const { comment, comments, getComments, getComment } = useComments()
+const Comment = ({ comment }) => {
+  const { comments, getComments, getComment } = useComments()
   const [editing, setEditing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    getComment(id)
+    getComment(comment.id)
   }, [])
 
   const handleEditClick = () => {
@@ -20,7 +20,7 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
 
   const deleteComment = () => {
     axios
-      .delete(`https://localhost:7218/api/Comments/Delete?id=${id}`)
+      .delete(`https://localhost:7218/api/Comments/Delete?id=${comment.id}`)
       .then(response => response.data)
       .then(data => data.data)
       .catch(err => console.log(err))
@@ -54,22 +54,18 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
               <span className='font-medium text-dark-blue'>{'mr.ahmed'}</span>
               <div className='bg-moderate-blue text-white text-xs rounded-sm px-1 h-5 flex items-center'>you</div>
             </div>
-            <span className='font-normal text-grayish-blue'>{createdAt}</span>
+            <span className='font-normal text-grayish-blue'>{comment.createdAt}</span>
           </div>
           {
             editing ?
               <EditComment
-                id={id}
-                content={content}
-                createdAt={createdAt}
-                score={score}
-                replies={replies}
+                comment={comment}
                 onEdit={() => setEditing(!editing)}
               /> :
-              <p className='font-normal text-grayish-blue'>{content}</p>
+              <p className='font-normal text-grayish-blue'>{comment.content}</p>
           }
         </div>
-        <Upvotes upvotes={score} />
+        <Upvotes comment={comment} />
         <div className='absolute bottom-6 right-6 lg:top-6 lg:bottom-auto flex gap-4'>
           <div className="flex items-center gap-1 group cursor-pointer" onClick={() => setIsOpen(true)}>
             <svg className='fill-soft-red group-hover:fill-pale-red' width="12" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M1.167 12.448c0 .854.7 1.552 1.555 1.552h6.222c.856 0 1.556-.698 1.556-1.552V3.5H1.167v8.948Zm10.5-11.281H8.75L7.773 0h-3.88l-.976 1.167H0v1.166h11.667V1.167Z" fill="inherit" /></svg>
@@ -81,13 +77,13 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
           </div>
         </div>
       </div >
-      {replies.count > 0 && <div className='flex'>
-        {parentId == null && <div className='border-l-4 border-light-gray pl-8 ml-8 flex flex-col'></div>}
-        {replies &&
+      {comment.replies.count > 0 && <div className='flex'>
+        {comment.parentId == null && <div className='border-l-4 border-light-gray pl-8 ml-8 flex flex-col' />}
+        {comment.replies &&
           <div className='w-full'>
             {
-              replies.map((el) => {
-                return <Comment id={el.id} content={el.content} createdAt={el.createdAt} score={el.score} replies={el.replies} parentId={el.parentId} key={el.id} />
+              comment.replies.map((el) => {
+                return <Comment comment={el} key={el.id} />
               })
             }
           </div>}

@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import useComments from '../../hooks/useComments'
 
-const Upvotes = ({ upvotes }) => {
+const Upvotes = ({ comment }) => {
   const [upvoted, setUpvoted] = useState(0)
-  const { getComment, setComment } = useComments()
 
   const handleUpvote = () => {
     setUpvoted(prevUpvoted => prevUpvoted + 1)
@@ -18,7 +17,7 @@ const Upvotes = ({ upvotes }) => {
       <p
         className={`${upvoted === -1 ? 'text-moderate-blue' : 'text-light-grayish-blue'} cursor-pointer font-bold  hover:text-moderate-blue text-center select-none lg:order-last`}
         onClick={upvoted > -1 && handleDownvote}>-</p>
-      <p className='text-moderate-blue font-medium cursor-default text-center select-none'>{upvotes + upvoted}</p>
+      <p className='text-moderate-blue font-medium cursor-default text-center select-none'>{comment.score}</p>
       <p
         className={`${upvoted === 1 ? 'text-moderate-blue' : 'text-light-grayish-blue'} cursor-pointer font-bold  hover:text-moderate-blue text-center select-none lg:order-first`}
         onClick={upvoted < 1 && handleUpvote}>+</p>

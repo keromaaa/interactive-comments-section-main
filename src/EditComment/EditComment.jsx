@@ -9,6 +9,9 @@ const EditComment = ({ id, content, onEdit }) => {
 
   const editComment = (e) => {
     e.preventDefault()
+
+    getComment(id)
+
     console.log(comment)
 
     axios
@@ -20,7 +23,7 @@ const EditComment = ({ id, content, onEdit }) => {
         }
       })
       .then(response => response.data)
-      .then(data => console.log(data.data))
+      .then(data => console.log(data.value))
       .catch(err => console.log(err))
       .finally(getComments())
 

@@ -2,15 +2,13 @@ import React, { useRef, useState } from 'react'
 import axios from 'axios'
 import useComments from '../../hooks/useComments'
 
-const EditComment = ({ id, content, onEdit }) => {
+const EditComment = ({ comment, onEdit }) => {
   const inputRef = useRef(null)
-  const [editContent, setEditContent] = useState(content)
-  const { comment, getComment, getComments } = useComments()
+  const [editContent, setEditContent] = useState(comment.content)
+  const { getComment, getComments } = useComments()
 
   const editComment = (e) => {
     e.preventDefault()
-
-    getComment(id)
 
     console.log(comment)
 
@@ -26,8 +24,6 @@ const EditComment = ({ id, content, onEdit }) => {
       .then(data => console.log(data.data))
       .catch(err => console.log(err))
       .finally(getComments())
-
-    getComment(id)
 
     // Call the onEdit callback to inform the parent component about the edit
     onEdit()

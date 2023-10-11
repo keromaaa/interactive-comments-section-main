@@ -6,17 +6,17 @@ import axios from 'axios'
 import EditComment from '../EditComment/EditComment'
 
 const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => {
-  const { comment, getComments, getComment } = useComments()
+  const { comment, comments, getComments, getComment } = useComments()
   const [editing, setEditing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
+  useEffect(() => {
+    getComment(id)
+    getComments()
+  }, [comments])
+
   const handleEditClick = () => {
     setEditing(!editing)
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    editComment(e)
   }
 
   const deleteComment = () => {
@@ -60,8 +60,7 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
           {
             editing ?
               <EditComment
-                id={id}
-                content={content}
+                comment={comment}
                 onEdit={() => setEditing(!editing)}
               /> :
               <p className='font-normal text-grayish-blue'>{content}</p>

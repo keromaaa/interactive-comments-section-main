@@ -6,7 +6,7 @@ import axios from 'axios'
 import EditComment from '../EditComment/EditComment'
 
 const Comment = ({ comment }) => {
-  const { comments, getComments, getComment } = useComments()
+  const { getComments, getComment } = useComments()
   const [editing, setEditing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 

@@ -12,8 +12,7 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
 
   useEffect(() => {
     getComment(id)
-    getComments()
-  }, [comments])
+  }, [])
 
   const handleEditClick = () => {
     setEditing(!editing)
@@ -60,7 +59,11 @@ const Comment = ({ id, user, content, createdAt, score, replies, parentId }) => 
           {
             editing ?
               <EditComment
-                comment={comment}
+                id={id}
+                content={content}
+                createdAt={createdAt}
+                score={score}
+                replies={replies}
                 onEdit={() => setEditing(!editing)}
               /> :
               <p className='font-normal text-grayish-blue'>{content}</p>

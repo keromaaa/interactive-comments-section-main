@@ -39,6 +39,10 @@ const UserProvider = ({ children }) => {
     return user
   }
 
+  useEffect(() => {
+    getUsers()
+  }, [users])
+
   return (
     <UserContext.Provider value={{
       user,
@@ -52,3 +56,5 @@ const UserProvider = ({ children }) => {
     </UserContext.Provider>
   )
 }
+
+export default UserProvider

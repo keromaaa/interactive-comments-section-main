@@ -25,7 +25,13 @@ const CommentProvider = ({ children }) => {
 
   const getComment = (id) => {
     axios
-      .get(`https://localhost:7218/api/Comments/Get?id=${id}`)
+      .get(`https://localhost:7218/api/Comments/Get?id=${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
+      })
       .then(response => response.data)
       .then(data => setComment(data.value))
       .catch(err => console.log(err.message))

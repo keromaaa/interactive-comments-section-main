@@ -2,9 +2,13 @@ import { data } from 'autoprefixer'
 import React, { useRef } from 'react'
 import axios from 'axios'
 import useComments from '../../hooks/useComments'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
 const AddComment = ({ currentUser, parentId, onClose }) => {
   const inputRef = useRef()
+
+  dayjs.extend(utc)
 
   const createComment = (e) => {
     e.preventDefault()
@@ -12,7 +16,7 @@ const AddComment = ({ currentUser, parentId, onClose }) => {
     const comment = {
       userId: currentUser.id,
       content: inputRef.current.value,
-      createdAt: "2023-10-02T21:29:30.507Z",
+      createdAt: dayjs().utc().add(2, 'hours'),
       score: 0,
       replies: [],
       parentId: parentId
@@ -64,7 +68,7 @@ const AddComment = ({ currentUser, parentId, onClose }) => {
           rows='5'
           placeholder='Add a comment...'>
         </textarea>
-        <input onClick={(e) => { createComment(e); onClose }} className='rounded-md bg-moderate-blue hover:bg-light-grayish-blue text-white px-6 py-3 w-fit h-fit font-medium cursor-pointer select-none' type="submit" value="SEND" />
+        <input onClick={(e) => { createComment(e); onClose() }} className='rounded-md bg-moderate-blue hover:bg-light-grayish-blue text-white px-6 py-3 w-fit h-fit font-medium cursor-pointer select-none' type="submit" value="SEND" />
       </form>
     </div >
   )

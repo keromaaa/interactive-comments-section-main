@@ -6,6 +6,8 @@ import axios from 'axios'
 import EditComment from '../EditComment/EditComment'
 import useUsers from '../../hooks/useUsers'
 import AddComment from '../AddComment/AddComment'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 const Comment = ({ currentUser, comment }) => {
   const { getComments } = useComments()
@@ -13,6 +15,10 @@ const Comment = ({ currentUser, comment }) => {
   const [replying, setReplying] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [user, setUser] = useState({})
+
+  dayjs.extend(relativeTime)
+
+  const createdTime = dayjs(comment.createdAt).fromNow()
 
   useEffect(() => {
     axios
@@ -75,7 +81,7 @@ const Comment = ({ currentUser, comment }) => {
                 <div className='bg-moderate-blue text-white text-xs rounded-sm px-1 h-5 flex items-center'>you</div>
               }
             </div>
-            <span className='font-normal text-grayish-blue'>{comment.createdAt}</span>
+            <span className='font-normal text-grayish-blue'>{createdTime}</span>
           </div>
           {
             editing ?

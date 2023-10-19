@@ -12,7 +12,7 @@ const CommentSection = () => {
 
   useEffect(() => {
     axios
-      .get("https://localhost:7218/api/Users/Get?id=1", {
+      .get("https://localhost:7218/api/Users/Get?id=2", {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
